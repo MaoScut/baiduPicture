@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	ul{
+		width: 100%;
+		padding: 0;
+	}
+		li{
+			float: left;
+			list-style: none;
+		}
+		.wrap-outer {
+    margin-left: calc(100vw - 100%);
+}
+	</style>
+</head>
+<body>
+	<ul id="picUl" onresize="alert('You have changed the size of the window')"></ul>
+</body>
+</html>
+<script type="text/javascript">
+	let pictureNum = 25;
+	let bili = [1.6681818181818182,1.7777777777777777,1.7777777777777777,1.6,0.75,1.2121212121212122,0.7899860917941586,0.7416666666666667,0.7183383991894631,0.8865248226950354,1.7777777777777777,1.25,0.7150297619047619,1.3333333333333333,0.73046875,1.3333333333333333,0.600375234521576,0.38666666666666666,0.5625,1.25,0.8227848101265823,1.482233502538071,1.6016949152542372,0.6038647342995169,1.2503052503052503].map(v=>Number(v.toFixed(3)));
+	function layoutPic() {
+		let picUl = document.getElementById('picUl');
+		picUl.addEventListener('resize', ()=>console.log('hhhh'));
+		let ulWidth = picUl.clientWidth-16;
+		let handledNum = 0;
+		let maxHeight = 200;
+		while(handledNum < pictureNum) {
+			let rh = Infinity;
+			let rowImage = [];
+			let index = handledNum;
+			while(rh > maxHeight && index < pictureNum) {
+				rowImage.push(index);
+				index ++;
+				// let temp = rowImage.reduce((pre, cur) => pre+(bili[cur]).toFixed(3), 0);
+				rh = ulWidth/(rowImage.reduce((pre, cur) => pre+bili[cur], 0));
+			}
+			// fill width
+			rowImage.forEach(v => {
+				let img = document.createElement('img');
+				img.src = '/images/' + v + '.jpg';
+				// let image = new Image();
+				// image.src = '../common/baiduPicture/' + i + '.jpg';
+				img.height = rh;
+				let li = document.createElement('li');
+				li.appendChild(img);
+				picUl.appendChild(li);				
+			});
+			picUl.appendChild(document.createElement('br'));
+			hr = Infinity;
+			handledNum += rowImage.length;
+		}
+	}
+	window.onload = function() {
+		// addImgNode();
+		layoutPic();
+		window.onresize = function() {
+			document.getElementById('picUl').innerHTML = '';
+			layoutPic();
+		}
+	}
+</script>
