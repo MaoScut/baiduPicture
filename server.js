@@ -23,10 +23,13 @@ const imagesPath = '/images';
 }).listen(8080, () => console.log('server listens on port 8080'));
 */
 let requsetHandlers = require('./requestHandlers.js');
+
+// bind url to handler
 let route = {
 	'/': requsetHandlers.Index,
 };
 
+//call function according url
 function Route(req, res) {
 	let url = req.url;
 	if(typeof route[url] == 'function')
@@ -36,4 +39,15 @@ function Route(req, res) {
 		requsetHandlers.staticSource(req, res);
 	}
 }
-let server = http.createServer(Route).listen(8080, () => console.log('server is listening on port 8080'));
+
+//create server and listen
+// let server = http.createServer(Route).listen(8080, () => console.log('server is listening on port 8080'));
+
+// rebuild this module, make it simple!
+function start(route, handle) {
+	function onRequest(req, res) {
+		route(req, res, handle);
+	}
+	http.createServer(onRequest).listen(8080, () => console.log('listening!'));
+}
+exports.start = start;

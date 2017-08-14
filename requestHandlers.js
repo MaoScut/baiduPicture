@@ -1,6 +1,7 @@
 let fs = require('fs');
-function Index(res) {
+function Index(req, res) {
 	// serve(__dirname + '/index.html', 'text/html');
+	console.log('call index');
 	res.writeHead(200, {'Content-Type': 'text/html'});
 	fs.createReadStream(__dirname + '/index.html').pipe(res);
 }
