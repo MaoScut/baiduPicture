@@ -1,7 +1,7 @@
 let http = require('http');
 let fs = require('fs');
 const imagesPath = '/images';
-let server = http.createServer((req, res) => {
+/*let server = http.createServer((req, res) => {
 	function serve(path, type) {
 		res.writeHead(200, {'Content-Type': type});
 		fs.createReadStream(path).pipe(res);
@@ -21,3 +21,19 @@ let server = http.createServer((req, res) => {
 		}
 	}
 }).listen(8080, () => console.log('server listens on port 8080'));
+*/
+let requsetHandlers = require('./requestHandlers.js');
+let route = {
+	'/': requsetHandlers.Index,
+};
+
+function Route(req, res) {
+	let url = req.url;
+	if(typeof route[url] == 'function')
+		route[url](res);
+	else {
+		// check if it is a image request
+		requsetHandlers.staticSource(req, res);
+	}
+}
+let server = http.createServer(Route).listen(8080, () => console.log('server is listening on port 8080'));
